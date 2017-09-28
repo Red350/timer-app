@@ -3,18 +3,23 @@ package red.padraig.twotapp.ui.activities
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_timer_complete.*
 import red.padraig.twotapp.R
-import red.padraig.twotapp.alarm.TimerAlarm
+import red.padraig.twotapp.alarm.TimerAlarmAnnunciator
 
 class TimerCompleteActivity : BaseActivity() {
 
-    lateinit var timerAlarm: TimerAlarm
+    lateinit var timerAlarmAnnunciator: TimerAlarmAnnunciator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_timer_complete)
 
-        timerAlarm = TimerAlarm.Impl(applicationContext)
-        timerAlarm.play()
+        timerAlarmAnnunciator = TimerAlarmAnnunciator.Impl(applicationContext)
+        timerAlarmAnnunciator.play()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        stopAlarm()
     }
 
     override fun initialiseListeners() {
@@ -29,7 +34,7 @@ class TimerCompleteActivity : BaseActivity() {
     }
 
     private fun stopAlarm() {
-        timerAlarm.stop()
+        timerAlarmAnnunciator.stop()
     }
 
 }
