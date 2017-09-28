@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">TwoTapp</string>
+    <string name="main_starttimer">Start</string>
+    <string name="main_pausetimer">Pause</string>
+    <string name="main_resumetimer">Resume</string>
+    <string name="main_resettimer">Reset</string>
+    <string name="main_hourlabel">h</string>
+    <string name="main_minutelabel">m</string>
+</resources>
