@@ -67,7 +67,7 @@ class TimerController(private val hourPicker: NumberPicker,
     }
 
     private fun createTimer(millis: Long): CountDownTimer {
-        return object : CountDownTimer(3000, TICK_INTERVAL) {
+        return object : CountDownTimer(millis, TICK_INTERVAL) {
             override fun onFinish() {
                 timerTick.onNext(-1)
             }
