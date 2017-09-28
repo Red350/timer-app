@@ -18,14 +18,13 @@ class TimerController(private val hourPicker: NumberPicker,
 
     val TICK_INTERVAL = 10L
 
-    val timerModel: TimerModel
+    val timerModel: TimerModel = TimerModel(sharedPrefs)
 
     var timerTick: PublishSubject<Long> = PublishSubject.create()
     var timer: CountDownTimer? = null
     var currentMillisRemaining: Long = 0
 
     init {
-        timerModel = TimerModel(sharedPrefs)
         timerModel.hourChanged.subscribe { hourPicker.value = it }
         timerModel.minuteChanged.subscribe { minutePicker.value = it}
 
