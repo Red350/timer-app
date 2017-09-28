@@ -18,14 +18,13 @@ class TimerController(private val hourPicker: NumberPicker,
 
     val TICK_INTERVAL = 10L
 
-    val timerModel: TimerModel
+    val timerModel: TimerModel = TimerModel(sharedPrefs)
 
     var timerTick: PublishSubject<Long> = PublishSubject.create()
     var timer: CountDownTimer? = null
     var currentMillisRemaining: Long = 0
 
     init {
-        timerModel = TimerModel(sharedPrefs)
         timerModel.hourChanged.subscribe { hourPicker.value = it }
         timerModel.minuteChanged.subscribe { minutePicker.value = it}
 
@@ -68,7 +67,7 @@ class TimerController(private val hourPicker: NumberPicker,
     }
 
     private fun createTimer(millis: Long): CountDownTimer {
-        return object : CountDownTimer(millis, TICK_INTERVAL) {
+        return object : CountDownTimer(3000, TICK_INTERVAL) {
             override fun onFinish() {
                 timerTick.onNext(-1)
             }

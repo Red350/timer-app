@@ -1,6 +1,7 @@
 package red.padraig.twotapp.ui.activities
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
@@ -91,6 +92,7 @@ class MainActivity : BaseActivity() {
          when (millisRemaining) {
              -1L -> ringAlarm()
              else -> {
+                 // todo move this to TimerController
                  val builder = StringBuilder()
                  builder.append(millisRemaining.getHours())
                  builder.append("h ")
@@ -105,8 +107,11 @@ class MainActivity : BaseActivity() {
     }
 
     private fun ringAlarm() {
+        // todo clean up this activity before launching the alarm activity
+        // allow pressing back to return to this activity
         resetTimer()
-        textview_main_countdown.text = "Alarm!!!!"
+        val intent = Intent(this, TimerCompleteActivity::class.java)
+        startActivity(intent)
     }
 
     private fun setCountdownVisibility(visible: Boolean) {
