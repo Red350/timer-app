@@ -23,7 +23,10 @@ class TimerCompleteActivity : BaseActivity() {
     }
 
     override fun initialiseListeners() {
-        button_timercomplete_stopalarm.setOnClickListener { this.stopAlarm() }
+        button_timercomplete_stopalarm.setOnClickListener {
+            this.stopAlarm()
+            finish()
+        }
     }
 
     override fun clearListeners() {
