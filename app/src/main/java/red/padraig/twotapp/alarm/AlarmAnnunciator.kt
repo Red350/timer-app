@@ -9,13 +9,13 @@ import android.net.Uri
 /**
  * Created by Red on 28/09/2017.
  */
-interface TimerAlarmAnnunciator {
+interface AlarmAnnunciator {
 
     fun play()
 
     fun stop()
 
-    class Impl(context: Context): TimerAlarmAnnunciator {
+    class Impl(context: Context): AlarmAnnunciator {
 
         private val notification: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
         private val ringtone: Ringtone = RingtoneManager.getRingtone(context, notification)
@@ -26,12 +26,7 @@ interface TimerAlarmAnnunciator {
         }
 
         override fun play() {
-            if (!played) {
-                ringtone.play()
-                played = true
-            } else {
-                throw RuntimeException("Ringtone already played")
-            }
+            ringtone.play()
         }
 
         override fun stop() {

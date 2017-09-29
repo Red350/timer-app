@@ -6,4 +6,5 @@
     <string name="main_resettimer">Reset</string>
     <string name="main_hourlabel">h</string>
     <string name="main_minutelabel">m</string>
+    <string name="main_secondlabel">s</string>
 </resources>
