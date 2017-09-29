@@ -20,11 +20,8 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        timerController = TimerController(numberpicker_main_hour, numberpicker_main_minute, textview_main_countdown, getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE) )
-        numberpicker_main_hour.minValue = 0
-        numberpicker_main_hour.maxValue = 11
-        numberpicker_main_minute.minValue = 0
-        numberpicker_main_minute.maxValue = 59
+        timerController = TimerController(this, numberpicker_main_hour, numberpicker_main_minute, textview_main_countdown, getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE) )
+        initialiseNumberPickers()
     }
 
     override fun onResume() {
@@ -38,10 +35,10 @@ class MainActivity : BaseActivity() {
     }
 
     override fun initialiseListeners() {
-        button_main_starttimer.setOnClickListener { this.startTimer() }
-        button_main_pausetimer.setOnClickListener { this.pauseTimer() }
-        button_main_resumetimer.setOnClickListener { this.resumeTimer() }
-        button_main_resettimer.setOnClickListener { this.resetTimer() }
+        button_main_starttimer.setOnClickListener { startTimer() }
+        button_main_pausetimer.setOnClickListener { pauseTimer() }
+        button_main_resumetimer.setOnClickListener { resumeTimer() }
+        button_main_resettimer.setOnClickListener { resetTimer() }
     }
 
     override fun clearListeners() {
@@ -56,6 +53,13 @@ class MainActivity : BaseActivity() {
                 timerController.timerTick.subscribe(this::updateCountdown),
                 timerController.createEnableStartButtonFlowable().subscribe(this::enableStartButton)
         )
+    }
+
+    private fun initialiseNumberPickers() {
+        numberpicker_main_hour.minValue = 0
+        numberpicker_main_hour.maxValue = 11
+        numberpicker_main_minute.minValue = 0
+        numberpicker_main_minute.maxValue = 59
     }
 
     fun startTimer() {
@@ -90,7 +94,10 @@ class MainActivity : BaseActivity() {
 
      fun updateCountdown(millisRemaining: Long) {
          when (millisRemaining) {
-             -1L -> ringAlarm()
+             // todo: Have this execute when timer expires while app is visible
+             // otherwise have the broadcast deal with the activity starting
+             // Will have to clear the broadcast in this case
+//             -1L -> ringAlarm()
              else -> {
                  // todo move this to TimerController
                  val builder = StringBuilder()

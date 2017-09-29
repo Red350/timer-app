@@ -1,5 +1,6 @@
 package red.padraig.twotapp.timer
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.os.CountDownTimer
 import android.widget.NumberPicker
@@ -7,14 +8,18 @@ import android.widget.TextView
 import io.reactivex.Flowable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
+import red.padraig.twotapp.alarm.AlarmSetter
 
 /**
  * Created by Red on 26/09/2017.
  */
-class TimerController(private val hourPicker: NumberPicker,
+class TimerController(private val context: Context,
+                      private val hourPicker: NumberPicker,
                       private val minutePicker: NumberPicker,
                       private val countDown: TextView,
                       sharedPrefs: SharedPreferences) {
+
+    // TODO: Refactor this class to not take views as parameters
 
     val TICK_INTERVAL = 10L
 
@@ -67,6 +72,9 @@ class TimerController(private val hourPicker: NumberPicker,
     }
 
     private fun createTimer(millis: Long): CountDownTimer {
+        // Register broadcast with OS
+        AlarmSetter.Impl().set(context, System.currentTimeMillis() + millis)
+
         return object : CountDownTimer(millis, TICK_INTERVAL) {
             override fun onFinish() {
                 timerTick.onNext(-1)
