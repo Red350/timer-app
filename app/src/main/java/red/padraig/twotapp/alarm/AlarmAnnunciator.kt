@@ -19,7 +19,6 @@ interface AlarmAnnunciator {
 
         private val notification: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
         private val ringtone: Ringtone = RingtoneManager.getRingtone(context, notification)
-        private var played = false
 
         init {
             ringtone.audioAttributes = AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ALARM).build()
@@ -32,6 +31,5 @@ interface AlarmAnnunciator {
         override fun stop() {
             ringtone.stop()
         }
-
     }
 }

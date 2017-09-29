@@ -45,7 +45,7 @@ class TimerController(private val context: Context) {
     }
 
     fun pauseTimer() {
-        timer?.cancel()
+        cancelTimer()
     }
 
     fun resumeTimer() {
@@ -53,7 +53,7 @@ class TimerController(private val context: Context) {
     }
 
     fun resetTimer() {
-        timer?.cancel()
+        cancelTimer()
     }
 
     fun restore() {
@@ -81,7 +81,7 @@ class TimerController(private val context: Context) {
 
         return object : CountDownTimer(millis, TICK_INTERVAL) {
             override fun onFinish() {
-                timerTick.onNext(-1)
+                timerTick.onNext(0)
             }
 
             override fun onTick(millisRemaining: Long) {
@@ -89,5 +89,12 @@ class TimerController(private val context: Context) {
                 millisRemainingOnTimerPaused = millisRemaining
             }
         }
+    }
+
+    private fun cancelTimer() {
+        // Cancel alarm broadcast
+        alarmSetter.cancel(context)
+
+        timer?.cancel()
     }
 }
