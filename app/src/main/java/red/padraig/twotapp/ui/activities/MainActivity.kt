@@ -1,6 +1,5 @@
 package red.padraig.twotapp.ui.activities
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -20,7 +19,7 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        timerController = TimerController(this, numberpicker_main_hour, numberpicker_main_minute, textview_main_countdown, getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE) )
+        timerController = TimerController(this)
         initialiseNumberPickers()
     }
 
@@ -56,10 +55,12 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initialiseNumberPickers() {
-        numberpicker_main_hour.minValue = 0
-        numberpicker_main_hour.maxValue = 11
-        numberpicker_main_minute.minValue = 0
-        numberpicker_main_minute.maxValue = 59
+        numberpicker_main_hours.minValue = 0
+        numberpicker_main_hours.maxValue = 11
+        numberpicker_main_minutes.minValue = 0
+        numberpicker_main_minutes.maxValue = 50
+        numberpicker_main_seconds.minValue = 0
+        numberpicker_main_seconds.maxValue = 59
     }
 
     fun startTimer() {

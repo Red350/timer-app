@@ -1,40 +1,43 @@
 package red.padraig.twotapp.timer
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.CountDownTimer
 import android.widget.NumberPicker
-import android.widget.TextView
 import io.reactivex.Flowable
-import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function3
 import io.reactivex.subjects.PublishSubject
+import kotlinx.android.synthetic.main.activity_main.*
+import red.padraig.twotapp.R
 import red.padraig.twotapp.alarm.AlarmSetter
+import red.padraig.twotapp.ui.activities.MainActivity
 
 /**
  * Created by Red on 26/09/2017.
  */
-class TimerController(private val context: Context,
-                      private val hourPicker: NumberPicker,
-                      private val minutePicker: NumberPicker,
-                      private val countDown: TextView,
-                      sharedPrefs: SharedPreferences) {
+class TimerController(private val context: Context) {
 
     // TODO: Refactor this class to not take views as parameters
 
-    val TICK_INTERVAL = 10L
+    private val TICK_INTERVAL = 10L
 
-    val timerModel: TimerModel = TimerModel(sharedPrefs)
+    private val timerModel: TimerModel = TimerModel(context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE) )
+    private val alarmSetter = AlarmSetter.Impl()
+    private val hoursPicker: NumberPicker = (context as MainActivity).numberpicker_main_hours
+    private val minutesPicker: NumberPicker = (context as MainActivity).numberpicker_main_minutes
+    private val secondsPicker: NumberPicker = (context as MainActivity).numberpicker_main_seconds
+    private var timer: CountDownTimer? = null
+    private var millisRemainingOnTimerPaused: Long = 0
 
     var timerTick: PublishSubject<Long> = PublishSubject.create()
-    var timer: CountDownTimer? = null
-    var currentMillisRemaining: Long = 0
 
     init {
-        timerModel.hourChanged.subscribe { hourPicker.value = it }
-        timerModel.minuteChanged.subscribe { minutePicker.value = it}
+        timerModel.hoursChanged.subscribe { hoursPicker.value = it }
+        timerModel.minutesChanged.subscribe { minutesPicker.value = it}
+        timerModel.secondsChanged.subscribe { secondsPicker.value = it}
 
-        hourPicker.setOnValueChangedListener { _,_,new -> timerModel.hour = new }
-        minutePicker.setOnValueChangedListener { _,_,new -> timerModel.minute = new }
+        hoursPicker.setOnValueChangedListener { _, _, hours -> timerModel.hours = hours }
+        minutesPicker.setOnValueChangedListener { _, _, minutes -> timerModel.minutes = minutes }
+        secondsPicker.setOnValueChangedListener { _, _, seconds -> timerModel.seconds = seconds }
     }
 
     fun startTimer() {
@@ -46,7 +49,7 @@ class TimerController(private val context: Context,
     }
 
     fun resumeTimer() {
-        timer = createTimer(currentMillisRemaining).start()
+        timer = createTimer(millisRemainingOnTimerPaused).start()
     }
 
     fun resetTimer() {
@@ -63,17 +66,18 @@ class TimerController(private val context: Context,
 
     fun createEnableStartButtonFlowable(): Flowable<Boolean> {
         return Flowable.combineLatest(
-                timerModel.hourChanged,
-                timerModel.minuteChanged,
-                BiFunction<Int, Int, Boolean> { hour, minute ->
-                    !((hour == 0) && (minute == 0))
+                timerModel.hoursChanged,
+                timerModel.minutesChanged,
+                timerModel.secondsChanged,
+                Function3<Int, Int, Int, Boolean> { hours, minutes, seconds ->
+                    !((hours == 0) && (minutes == 0) && (seconds == 0))
                 }
         )
     }
 
     private fun createTimer(millis: Long): CountDownTimer {
         // Register broadcast with OS
-        AlarmSetter.Impl().set(context, System.currentTimeMillis() + millis)
+        alarmSetter.set(context, System.currentTimeMillis() + millis)
 
         return object : CountDownTimer(millis, TICK_INTERVAL) {
             override fun onFinish() {
@@ -82,7 +86,7 @@ class TimerController(private val context: Context,
 
             override fun onTick(millisRemaining: Long) {
                 timerTick.onNext(millisRemaining)
-                currentMillisRemaining = millisRemaining
+                millisRemainingOnTimerPaused = millisRemaining
             }
         }
     }
