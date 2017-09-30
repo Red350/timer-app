@@ -5,7 +5,7 @@ import android.os.CountDownTimer
 import android.widget.NumberPicker
 import io.reactivex.Flowable
 import io.reactivex.functions.Function3
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.activity_main.*
 import red.padraig.twotapp.R
 import red.padraig.twotapp.alarm.AlarmBroadcastSetter
@@ -28,10 +28,13 @@ class TimerController(private val context: Context) {
     private var timer: CountDownTimer? = null
     private var millisRemaining: Long = -1 // -1 when no timer active
 
-    var timerTick: PublishSubject<Long> = PublishSubject.create()
+    var timerTick: BehaviorSubject<Long> = BehaviorSubject.create()
 
     val timerActive: Boolean
-        get() = timerModel.getTimer() != -1L
+        get() = (timerModel.getActiveTimerDueTime() != -1L)
+
+    val timerPaused: Boolean
+        get() = (timerModel.getPausedTimer() != -1L)
 
     init {
         timerModel.hoursChanged.subscribe { hoursPicker.value = it }
@@ -44,16 +47,33 @@ class TimerController(private val context: Context) {
     }
 
     fun startTimer() {
-        timer = createTimer(if (timerActive) timerModel.getTimer() - System.currentTimeMillis() else timerModel.millis).start()
+        val millis: Long
+        if (timerActive) {
+            millis = timerModel.getActiveTimerDueTime() - System.currentTimeMillis()
+        } else if (timerPaused) {
+            millis = timerModel.getPausedTimer()
+            millisRemaining = millis
+            timerTick.onNext(millis)
+        } else {
+            millis = timerModel.millis
+        }
+        timer = createTimer(millis).start()
     }
 
-    fun pauseTimer() = cancelTimer()
+    fun pauseTimer() {
+        cancelTimer()
+        timerModel.savePausedTimer(millisRemaining)
+    }
 
     fun resumeTimer() {
         timer = createTimer(millisRemaining).start()
+        timerModel.clearPausedTimer()
     }
 
-    fun resetTimer() = cancelTimer()
+    fun resetTimer() {
+        cancelTimer()
+        timerModel.clearPausedTimer()
+    }
 
     fun restoreSettings() = timerModel.restoreSettings()
 
@@ -75,7 +95,7 @@ class TimerController(private val context: Context) {
         // Register broadcast with OS
         alarmSetter.set(context, dueTime)
         // Store timer in persistent storage
-        timerModel.saveTimer(dueTime)
+        timerModel.saveActiveTimerDueTime(dueTime)
 
         return object : CountDownTimer(timerMillis, TICK_INTERVAL) {
 
@@ -94,6 +114,6 @@ class TimerController(private val context: Context) {
     private fun cancelTimer() {
         alarmSetter.cancel(context)
         timer?.cancel()
-        timerModel.clearTimer()
+        timerModel.clearActiveTimerDueTime()
     }
 }

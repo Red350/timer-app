@@ -19,8 +19,8 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        timerController = TimerController(this)
         initialiseNumberPickers()
+        timerController = TimerController(this)
         displayTimerIfRunningOrPaused()
     }
 
@@ -138,6 +138,9 @@ class MainActivity : BaseActivity() {
     private fun displayTimerIfRunningOrPaused() {
         if (timerController.timerActive) {
             startTimer()
+        } else if (timerController.timerPaused) {
+            startTimer()
+            pauseTimer()
         }
     }
 

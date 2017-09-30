@@ -11,7 +11,8 @@ class TimerModel(val sharedPreferences: SharedPreferences) {
     val HOURS = "HOURS"
     val MINUTES = "MINUTES"
     val SECONDS = "SECONDS"
-    val TIME_DUE = "TIME_DUE"
+    val ACTIVE_TIMER = "ACTIVE_TIMER"
+    val PAUSED_TIMER = "PAUSED_TIMER"
 
     var hours = 0
         set(value) {
@@ -64,17 +65,31 @@ class TimerModel(val sharedPreferences: SharedPreferences) {
         editor.apply()
     }
 
-    fun saveTimer(millis: Long) {
+    fun saveActiveTimerDueTime(millis: Long) {
         val editor = sharedPreferences.edit()
-        editor.putLong(TIME_DUE, millis)
+        editor.putLong(ACTIVE_TIMER, millis)
         editor.apply()
     }
 
-    fun getTimer(): Long {
-        return sharedPreferences.getLong(TIME_DUE, -1)
+    fun getActiveTimerDueTime(): Long {
+        return sharedPreferences.getLong(ACTIVE_TIMER, -1)
     }
 
-    fun clearTimer() {
-        saveTimer(-1)
+    fun clearActiveTimerDueTime() {
+        saveActiveTimerDueTime(-1)
+    }
+
+    fun savePausedTimer(millis: Long) {
+        val editor = sharedPreferences.edit()
+        editor.putLong(PAUSED_TIMER, millis)
+        editor.apply()
+    }
+
+    fun getPausedTimer(): Long {
+        return sharedPreferences.getLong(PAUSED_TIMER, -1)
+    }
+
+    fun clearPausedTimer() {
+        savePausedTimer(-1)
     }
 }
