@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="main_controlbuttonsize">100dp</dimen>
+    <dimen name="main_timeLabelSize">25sp</dimen>
+    <dimen name="timercompleted">50sp</dimen>
+</resources>

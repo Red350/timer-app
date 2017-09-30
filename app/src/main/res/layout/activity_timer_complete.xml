@@ -3,11 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
     tools:context="red.padraig.twotapp.ui.activities.TimerCompleteActivity">
 
-    <Button android:id="@+id/button_timercomplete_stopalarm"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Stop alarm"/>
+        android:textSize="@dimen/timercompleted"
+        android:text="@string/timercomplete_timercompleted"/>
+    <ImageButton android:id="@+id/button_timercomplete_stopalarm"
+        android:layout_width="@dimen/main_controlbuttonsize"
+        android:layout_height="@dimen/main_controlbuttonsize"
+        android:background="@drawable/ic_stop"
+        android:contentDescription="@string/timercomplete_stopalarmdescription" />
 
 </LinearLayout>
