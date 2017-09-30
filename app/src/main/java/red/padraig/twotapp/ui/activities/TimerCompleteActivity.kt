@@ -1,5 +1,6 @@
 package red.padraig.twotapp.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
 import kotlinx.android.synthetic.main.activity_timer_complete.*
@@ -28,6 +29,10 @@ class TimerCompleteActivity : BaseActivity() {
     override fun onStop() {
         super.onStop()
         stopAlarm()
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
     }
 
     override fun initialiseListeners() {

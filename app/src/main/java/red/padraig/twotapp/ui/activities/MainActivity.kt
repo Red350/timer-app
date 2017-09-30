@@ -49,7 +49,7 @@ class MainActivity : BaseActivity() {
 
     override fun initialiseSubscriptions() {
         disposables.addAll(
-                timerController.timerTick.subscribe(this::updateCountdown),
+                timerController.timerTick.subscribe(this::onCountdownTick),
                 timerController.createEnableStartButtonFlowable().subscribe(this::enableStartButton)
         )
     }
@@ -93,33 +93,30 @@ class MainActivity : BaseActivity() {
         timerController.resetTimer()
     }
 
-     fun updateCountdown(millisRemaining: Long) {
-         when (millisRemaining) {
-             // todo: Have this execute when timer expires while app is visible
-             // otherwise have the broadcast deal with the activity starting
-             // Will have to clear the broadcast in this case
-//             -1L -> ringAlarm()
-             else -> {
-                 // todo move this to TimerController
-                 val builder = StringBuilder()
-                 builder.append(millisRemaining.getHours())
-                 builder.append("h ")
-                 builder.append(millisRemaining.getMinutes())
-                 builder.append("m ")
-                 builder.append(millisRemaining.getSeconds())
-                 builder.append("s ")
-                 builder.append(String.format("%03d", millisRemaining.getMilliseconds()))
-                 textview_main_countdown.text = builder.toString()
-             }
-         }
+     fun onCountdownTick(millisRemaining: Long) {
+         updateCountdown(millisRemaining)
+         if (millisRemaining == 0L)
+             ringAlarm()
+    }
+
+    private fun updateCountdown(millisRemaining: Long) {
+        // todo move this to TimerController
+        val builder = StringBuilder()
+        builder.append(millisRemaining.getHours())
+        builder.append("h ")
+        builder.append(millisRemaining.getMinutes())
+        builder.append("m ")
+        builder.append(millisRemaining.getSeconds())
+        builder.append("s ")
+        builder.append(String.format("%03d", millisRemaining.getMilliseconds()))
+        textview_main_countdown.text = builder.toString()
     }
 
     private fun ringAlarm() {
-        // todo clean up this activity before launching the alarm activity
-        // allow pressing back to return to this activity
-        resetTimer()
+        timerController.resetTimer()
         val intent = Intent(this, TimerCompleteActivity::class.java)
         startActivity(intent)
+        finish()
     }
 
     private fun setCountdownVisibility(visible: Boolean) {

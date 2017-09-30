@@ -35,7 +35,7 @@ interface AlarmAnnunciator {
         }
     }
 
-    class ToastAlarm(val context: Context): AlarmAnnunciator {
+    class ToastAlarm(context: Context): AlarmAnnunciator {
 
         private val toast = Toast.makeText(context, "Alarm!!!!", Toast.LENGTH_LONG)
         override fun play() {

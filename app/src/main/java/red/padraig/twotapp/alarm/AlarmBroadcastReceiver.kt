@@ -14,8 +14,9 @@ class AlarmBroadcastReceiver: BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         val powerManager = context?.getSystemService(Context.POWER_SERVICE) as PowerManager
         val wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "TimerWakelock")
+        val newIntent = Intent(context, TimerCompleteActivity::class.java)
         wakeLock.acquire(1000)
-        context.startActivity(Intent(context, TimerCompleteActivity::class.java))
+        context.startActivity(newIntent)
         wakeLock.release()
     }
 }
