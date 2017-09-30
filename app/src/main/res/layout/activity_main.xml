@@ -10,11 +10,12 @@
     tools:context="red.padraig.twotapp.ui.activities.MainActivity">
 
 
-    <RelativeLayout android:id="@+id/linearlayout_main_countdowncontainer"
+    <RelativeLayout
+        android:id="@+id/linearlayout_main_countdowncontainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_centerInParent="true">
+        android:layout_centerInParent="true"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/linearlayout_main_setcountdown"
@@ -65,18 +66,16 @@
             android:id="@+id/textview_main_displaycountdown"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:textSize="30sp"
             android:layout_centerInParent="true"
-            android:text="0h 00m 00s 000"/>
+            android:text="0h 00m 00s 000"
+            android:textSize="30sp"
+            android:visibility="gone" />
     </RelativeLayout>
 
 
-
-
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/linearlayout_main_controlbuttons"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/linearlayout_main_countdowncontainer"
         android:layout_centerHorizontal="true">
@@ -85,6 +84,7 @@
             android:id="@+id/button_main_starttimer"
             android:layout_width="@dimen/main_controlbuttonsize"
             android:layout_height="@dimen/main_controlbuttonsize"
+            android:layout_centerInParent="true"
             android:background="@drawable/ic_play"
             android:contentDescription="@string/main_playbuttondescription" />
 
@@ -92,6 +92,7 @@
             android:id="@+id/button_main_pausetimer"
             android:layout_width="@dimen/main_controlbuttonsize"
             android:layout_height="@dimen/main_controlbuttonsize"
+            android:layout_centerInParent="true"
             android:background="@drawable/ic_pause"
             android:contentDescription="@string/main_pausebuttondescription"
             android:visibility="gone" />
@@ -100,17 +101,20 @@
             android:id="@+id/button_main_resumetimer"
             android:layout_width="@dimen/main_controlbuttonsize"
             android:layout_height="@dimen/main_controlbuttonsize"
+            android:layout_centerInParent="true"
             android:background="@drawable/ic_play"
             android:contentDescription="@string/main_resumebuttondescription"
             android:visibility="gone" />
 
         <ImageButton
             android:id="@+id/button_main_resettimer"
-            android:layout_width="@dimen/main_controlbuttonsize"
-            android:layout_height="@dimen/main_controlbuttonsize"
+            android:layout_width="@dimen/main_resetButtonSize"
+            android:layout_height="@dimen/main_resetButtonSize"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/button_main_starttimer"
             android:background="@drawable/ic_stop"
             android:contentDescription="@string/main_resettimerdescription"
             android:visibility="invisible" />
-    </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

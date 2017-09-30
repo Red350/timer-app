@@ -69,7 +69,7 @@ class MainActivity : BaseActivity() {
 
     fun startTimer() {
         setCountdownVisibility(true)
-        button_main_starttimer.visibility = View.GONE
+        button_main_starttimer.visibility = View.INVISIBLE
         button_main_pausetimer.visibility = View.VISIBLE
         timerController.startTimer()
     }
