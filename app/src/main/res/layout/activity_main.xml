@@ -5,93 +5,116 @@
     android:layout_height="match_parent"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
+    android:gravity="center"
+    android:orientation="vertical"
     tools:context="red.padraig.twotapp.ui.activities.MainActivity">
 
 
-    <LinearLayout
-        android:id="@+id/linearlayout_main_setcountdown"
+    <RelativeLayout
+        android:id="@+id/linearlayout_main_countdowncontainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
         android:orientation="horizontal">
 
-        <NumberPicker
-            android:id="@+id/numberpicker_main_hours"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
+        <LinearLayout
+            android:id="@+id/linearlayout_main_setcountdown"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/main_hourlabel"
-            android:textColor="@color/timeLabel"
-            android:textSize="25sp"
-            android:layout_gravity="center_vertical"/>
+            android:orientation="horizontal">
 
-        <NumberPicker
-            android:id="@+id/numberpicker_main_minutes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            <NumberPicker
+                android:id="@+id/numberpicker_main_hours"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/main_hourlabel"
+                android:textSize="25sp" />
+
+            <NumberPicker
+                android:id="@+id/numberpicker_main_minutes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/main_minutelabel"
+                android:textColor="@color/color_main_timeLabel"
+                android:textSize="@dimen/main_timeLabelSize" />
+
+            <NumberPicker
+                android:id="@+id/numberpicker_main_seconds"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/main_secondlabel"
+                android:textColor="@color/color_main_timeLabel"
+                android:textSize="25sp" />
+        </LinearLayout>
 
         <TextView
+            android:id="@+id/textview_main_displaycountdown"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/main_minutelabel"
-            android:textColor="@color/timeLabel"
-            android:textSize="25sp"
-            android:layout_gravity="center_vertical"/>
+            android:layout_centerInParent="true"
+            android:text="0h 00m 00s 000"
+            android:textSize="30sp"
+            android:visibility="gone" />
+    </RelativeLayout>
 
-        <NumberPicker
-            android:id="@+id/numberpicker_main_seconds"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/main_secondlabel"
-            android:textColor="@color/timeLabel"
-            android:textSize="25sp"
-            android:layout_gravity="center_vertical"/>
-    </LinearLayout>
-
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/linearlayout_main_controlbuttons"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
+        android:layout_below="@id/linearlayout_main_countdowncontainer"
+        android:layout_centerHorizontal="true">
 
-        <Button
+        <ImageButton
             android:id="@+id/button_main_starttimer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/main_starttimer"/>
+            android:layout_width="@dimen/main_controlbuttonsize"
+            android:layout_height="@dimen/main_controlbuttonsize"
+            android:layout_centerInParent="true"
+            android:background="@drawable/ic_play"
+            android:contentDescription="@string/main_playbuttondescription" />
 
-        <Button
+        <ImageButton
             android:id="@+id/button_main_pausetimer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/main_pausetimer"
-            android:visibility="gone"/>
+            android:layout_width="@dimen/main_controlbuttonsize"
+            android:layout_height="@dimen/main_controlbuttonsize"
+            android:layout_centerInParent="true"
+            android:background="@drawable/ic_pause"
+            android:contentDescription="@string/main_pausebuttondescription"
+            android:visibility="gone" />
 
-        <Button
+        <ImageButton
             android:id="@+id/button_main_resumetimer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/main_resumetimer"
-            android:visibility="gone"/>
+            android:layout_width="@dimen/main_controlbuttonsize"
+            android:layout_height="@dimen/main_controlbuttonsize"
+            android:layout_centerInParent="true"
+            android:background="@drawable/ic_play"
+            android:contentDescription="@string/main_resumebuttondescription"
+            android:visibility="gone" />
 
-        <Button
+        <ImageButton
             android:id="@+id/button_main_resettimer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/main_resettimer"
-            android:visibility="invisible"/>
-    </LinearLayout>
-
-    <TextView android:id="@+id/textview_main_countdown"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"/>
+            android:layout_width="@dimen/main_resetButtonSize"
+            android:layout_height="@dimen/main_resetButtonSize"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/button_main_starttimer"
+            android:background="@drawable/ic_stop"
+            android:contentDescription="@string/main_resettimerdescription"
+            android:visibility="invisible" />
+    </RelativeLayout>
 
 </RelativeLayout>

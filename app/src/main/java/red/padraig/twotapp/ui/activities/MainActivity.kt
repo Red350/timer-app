@@ -11,6 +11,7 @@ import red.padraig.twotapp.extensions.getMinutes
 import red.padraig.twotapp.extensions.getSeconds
 import red.padraig.twotapp.timer.TimerController
 
+
 class MainActivity : BaseActivity() {
 
     lateinit var timerController: TimerController
@@ -19,6 +20,7 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        setCountdownVisibility(false)
         initialiseNumberPickers()
         timerController = TimerController(this)
         displayTimerIfRunningOrPaused()
@@ -67,7 +69,7 @@ class MainActivity : BaseActivity() {
 
     fun startTimer() {
         setCountdownVisibility(true)
-        button_main_starttimer.visibility = View.GONE
+        button_main_starttimer.visibility = View.INVISIBLE
         button_main_pausetimer.visibility = View.VISIBLE
         timerController.startTimer()
     }
@@ -111,7 +113,7 @@ class MainActivity : BaseActivity() {
         builder.append(String.format("%02d", millisRemaining.getSeconds()))
         builder.append("s ")
         builder.append(String.format("%03d", millisRemaining.getMilliseconds()))
-        textview_main_countdown.text = builder.toString()
+        textview_main_displaycountdown.text = builder.toString()
     }
 
     private fun ringAlarm() {
@@ -123,10 +125,10 @@ class MainActivity : BaseActivity() {
 
     private fun setCountdownVisibility(visible: Boolean) {
         if (visible) {
-            textview_main_countdown.visibility = View.VISIBLE
-            linearlayout_main_setcountdown.visibility = View.GONE
+            textview_main_displaycountdown.visibility = View.VISIBLE
+            linearlayout_main_setcountdown.visibility = View.INVISIBLE
         } else {
-            textview_main_countdown.visibility = View.GONE
+            textview_main_displaycountdown.visibility = View.GONE
             linearlayout_main_setcountdown.visibility = View.VISIBLE
         }
     }

@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorDefaultText">#FFFFFF</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="timeLabel">#444444</color>
+
+    <!-- Main activity -->
+    <color name="color_main_background">#383838</color>
+    <color name="color_main_timeLabel">#FFFFFF</color>
+    <color name="color_main_numberPickerText">#FFFFFF</color>
+    <color name="color_main_button">#FFFFFF</color>
 
 </resources>

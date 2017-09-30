@@ -7,4 +7,10 @@
     <string name="main_hourlabel">h</string>
     <string name="main_minutelabel">m</string>
     <string name="main_secondlabel">s</string>
+    <string name="main_playbuttondescription">Start timer</string>
+    <string name="main_pausebuttondescription">Pause timer</string>
+    <string name="main_resumebuttondescription">Resume timer</string>
+    <string name="main_resettimerdescription">Reset timer</string>
+    <string name="timercomplete_timercompleted">Time\'s Up!</string>
+    <string name="timercomplete_stopalarmdescription">Stop alarm</string>
 </resources>
