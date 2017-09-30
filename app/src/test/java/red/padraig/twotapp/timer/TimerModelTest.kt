@@ -15,44 +15,44 @@ class TimerModelTest {
 
     @Test
     fun testHourSets_IfValueInRange() {
-        Assert.assertEquals(0, timer.hour)
-        timer.hour = 50
-        Assert.assertEquals(50, timer.hour)
-        timer.hour = 99
-        Assert.assertEquals(99, timer.hour)
-        timer.hour = 0
-        Assert.assertEquals(0, timer.hour)
+        Assert.assertEquals(0, timer.hours)
+        timer.hours = 50
+        Assert.assertEquals(50, timer.hours)
+        timer.hours = 99
+        Assert.assertEquals(99, timer.hours)
+        timer.hours = 0
+        Assert.assertEquals(0, timer.hours)
 
     }
 
     @Test
     fun testHourDoesNotSet_IfValueOutsideRange() {
-        Assert.assertEquals(0, timer.hour)
-        timer.hour = -1
-        Assert.assertEquals(0, timer.hour)
-        timer.hour = 100
-        Assert.assertEquals(0, timer.hour)
+        Assert.assertEquals(0, timer.hours)
+        timer.hours = -1
+        Assert.assertEquals(0, timer.hours)
+        timer.hours = 100
+        Assert.assertEquals(0, timer.hours)
     }
 
     @Test
     fun testMinSets_IfValueInRange() {
-        Assert.assertEquals(0, timer.minute)
-        timer.minute = 50
-        Assert.assertEquals(50, timer.minute)
-        timer.minute = 99
-        Assert.assertEquals(99, timer.minute)
-        timer.minute = 0
-        Assert.assertEquals(0, timer.minute)
+        Assert.assertEquals(0, timer.minutes)
+        timer.minutes = 50
+        Assert.assertEquals(50, timer.minutes)
+        timer.minutes = 99
+        Assert.assertEquals(99, timer.minutes)
+        timer.minutes = 0
+        Assert.assertEquals(0, timer.minutes)
 
     }
 
     @Test
     fun testMinDoesNotSet_IfValueOutsideRange() {
-        Assert.assertEquals(0, timer.minute)
-        timer.minute = -1
-        Assert.assertEquals(0, timer.minute)
-        timer.minute = 100
-        Assert.assertEquals(0, timer.minute)
+        Assert.assertEquals(0, timer.minutes)
+        timer.minutes = -1
+        Assert.assertEquals(0, timer.minutes)
+        timer.minutes = 100
+        Assert.assertEquals(0, timer.minutes)
     }
 
 

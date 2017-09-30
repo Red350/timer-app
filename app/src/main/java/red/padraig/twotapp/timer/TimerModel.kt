@@ -8,50 +8,58 @@ import io.reactivex.processors.BehaviorProcessor
  */
 class TimerModel(val sharedPreferences: SharedPreferences) {
 
-    val HOUR = "HOUR"
-    val MINUTE = "MINUTE"
+    val HOURS = "HOURS"
+    val MINUTES = "MINUTES"
+    val SECONDS = "SECONDS"
 
-    var hour = 0
+    var hours = 0
         set(value) {
-            if (value != hour && isInRange(value)) {
+            if (value != hours) {
                 field = value
-                hourChanged.onNext(value)
+                hoursChanged.onNext(value)
             }
         }
-    var minute = 0
+    var minutes = 0
         set(value) {
-            if (value != minute && isInRange(value)) {
+            if (value != minutes) {
                 field = value
-                minuteChanged.onNext(value)
+                minutesChanged.onNext(value)
+            }
+        }
+    var seconds = 0
+        set(value) {
+            if (value != seconds) {
+                field = value
+                secondsChanged.onNext(value)
             }
         }
 
-    val hourChanged: BehaviorProcessor<Int> = BehaviorProcessor.createDefault(hour)
-    val minuteChanged: BehaviorProcessor<Int> = BehaviorProcessor.createDefault(minute)
+    val hoursChanged: BehaviorProcessor<Int> = BehaviorProcessor.createDefault(hours)
+    val minutesChanged: BehaviorProcessor<Int> = BehaviorProcessor.createDefault(minutes)
+    val secondsChanged: BehaviorProcessor<Int> = BehaviorProcessor.createDefault(seconds)
     val millis: Long
         get() {
-            return ((hour * 60 * 60 * 1000) + minute * 60 * 1000).toLong()
+            return ((hours * 60 * 60 * 1000) + (minutes * 60 * 1000) + seconds * 1000).toLong()
         }
 
-    private fun isInRange(value: Int): Boolean {
-        return value in 0..99
-    }
-
     fun restore() {
-        val storedHour = sharedPreferences.getInt(HOUR, -1)
-        val storedMinute = sharedPreferences.getInt(MINUTE, -1)
+        val storedHours = sharedPreferences.getInt(HOURS, -1)
+        val storedMinutes = sharedPreferences.getInt(MINUTES, -1)
+        val storedSeconds = sharedPreferences.getInt(SECONDS, -1)
 
-        if (storedHour != -1)
-            hour = storedHour
-
-        if (storedMinute != -1)
-            minute = storedMinute
+        if (storedHours != -1)
+            hours = storedHours
+        if (storedMinutes != -1)
+            minutes = storedMinutes
+        if (storedSeconds != -1)
+            seconds = storedSeconds
     }
 
     fun save() {
         val editor = sharedPreferences.edit()
-        editor.putInt(HOUR, hour)
-        editor.putInt(MINUTE, minute)
-        editor.commit()
+        editor.putInt(HOURS, hours)
+        editor.putInt(MINUTES, minutes)
+        editor.putInt(SECONDS, seconds)
+        editor.apply()
     }
 }

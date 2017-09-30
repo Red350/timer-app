@@ -5,6 +5,8 @@ import android.media.AudioAttributes
 import android.media.Ringtone
 import android.media.RingtoneManager
 import android.net.Uri
+import android.widget.Toast
+
 
 /**
  * Created by Red on 28/09/2017.
@@ -19,7 +21,6 @@ interface AlarmAnnunciator {
 
         private val notification: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
         private val ringtone: Ringtone = RingtoneManager.getRingtone(context, notification)
-        private var played = false
 
         init {
             ringtone.audioAttributes = AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ALARM).build()
@@ -31,6 +32,18 @@ interface AlarmAnnunciator {
 
         override fun stop() {
             ringtone.stop()
+        }
+    }
+
+    class ToastAlarm(context: Context): AlarmAnnunciator {
+
+        private val toast = Toast.makeText(context, "Alarm!!!!", Toast.LENGTH_LONG)
+        override fun play() {
+            toast.show()
+        }
+
+        override fun stop() {
+            toast.cancel()
         }
 
     }

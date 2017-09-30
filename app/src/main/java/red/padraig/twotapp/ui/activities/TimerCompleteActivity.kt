@@ -1,5 +1,6 @@
 package red.padraig.twotapp.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
 import kotlinx.android.synthetic.main.activity_timer_complete.*
@@ -17,7 +18,7 @@ class TimerCompleteActivity : BaseActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
         window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
 
-        alarmAnnunciator = AlarmAnnunciator.Impl(applicationContext)
+        alarmAnnunciator = AlarmAnnunciator.ToastAlarm(applicationContext)
     }
 
     override fun onStart() {
@@ -28,6 +29,10 @@ class TimerCompleteActivity : BaseActivity() {
     override fun onStop() {
         super.onStop()
         stopAlarm()
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
     }
 
     override fun initialiseListeners() {
