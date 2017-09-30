@@ -21,16 +21,18 @@ class MainActivity : BaseActivity() {
 
         timerController = TimerController(this)
         initialiseNumberPickers()
+        displayTimerIfRunningOrPaused()
     }
 
     override fun onResume() {
         super.onResume()
-        timerController.restore()
+        timerController.restoreSettings()
     }
 
     override fun onPause() {
         super.onPause()
-        timerController.save()
+        timerController.saveSettings()
+        timerController
     }
 
     override fun initialiseListeners() {
@@ -104,9 +106,9 @@ class MainActivity : BaseActivity() {
         val builder = StringBuilder()
         builder.append(millisRemaining.getHours())
         builder.append("h ")
-        builder.append(millisRemaining.getMinutes())
+        builder.append(String.format("%02d", millisRemaining.getMinutes()))
         builder.append("m ")
-        builder.append(millisRemaining.getSeconds())
+        builder.append(String.format("%02d", millisRemaining.getSeconds()))
         builder.append("s ")
         builder.append(String.format("%03d", millisRemaining.getMilliseconds()))
         textview_main_countdown.text = builder.toString()
@@ -131,6 +133,12 @@ class MainActivity : BaseActivity() {
 
     private fun enableStartButton(enable: Boolean) {
         button_main_starttimer.isEnabled = enable
+    }
+
+    private fun displayTimerIfRunningOrPaused() {
+        if (timerController.timerActive) {
+            startTimer()
+        }
     }
 
 }

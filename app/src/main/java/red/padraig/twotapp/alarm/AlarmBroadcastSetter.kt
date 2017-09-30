@@ -9,13 +9,13 @@ import android.content.Intent
 /**
  * Created by Red on 28/09/2017.
  */
-interface AlarmSetter {
+interface AlarmBroadcastSetter {
 
     fun set(context: Context, triggerAtMillis: Long)
 
     fun cancel(context: Context)
 
-    class Impl: AlarmSetter {
+    class Impl: AlarmBroadcastSetter {
 
         override fun set(context: Context, triggerAtMillis: Long) {
             getAlarmManager(context).setExact(AlarmManager.RTC_WAKEUP, triggerAtMillis, createPendingIntent(context))

@@ -8,7 +8,7 @@ import io.reactivex.functions.Function3
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_main.*
 import red.padraig.twotapp.R
-import red.padraig.twotapp.alarm.AlarmSetter
+import red.padraig.twotapp.alarm.AlarmBroadcastSetter
 import red.padraig.twotapp.ui.activities.MainActivity
 
 /**
@@ -16,19 +16,22 @@ import red.padraig.twotapp.ui.activities.MainActivity
  */
 class TimerController(private val context: Context) {
 
-    // TODO: Refactor this class to not take views as parameters
-
     private val TICK_INTERVAL = 10L
 
     private val timerModel: TimerModel = TimerModel(context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE) )
-    private val alarmSetter = AlarmSetter.Impl()
+    private val alarmSetter = AlarmBroadcastSetter.Impl()
+
     private val hoursPicker: NumberPicker = (context as MainActivity).numberpicker_main_hours
     private val minutesPicker: NumberPicker = (context as MainActivity).numberpicker_main_minutes
     private val secondsPicker: NumberPicker = (context as MainActivity).numberpicker_main_seconds
+
     private var timer: CountDownTimer? = null
-    private var millisRemainingOnTimerPaused: Long = 0
+    private var millisRemaining: Long = -1 // -1 when no timer active
 
     var timerTick: PublishSubject<Long> = PublishSubject.create()
+
+    val timerActive: Boolean
+        get() = timerModel.getTimer() != -1L
 
     init {
         timerModel.hoursChanged.subscribe { hoursPicker.value = it }
@@ -41,28 +44,20 @@ class TimerController(private val context: Context) {
     }
 
     fun startTimer() {
-        timer = createTimer(timerModel.millis).start()
+        timer = createTimer(if (timerActive) timerModel.getTimer() - System.currentTimeMillis() else timerModel.millis).start()
     }
 
-    fun pauseTimer() {
-        cancelTimer()
-    }
+    fun pauseTimer() = cancelTimer()
 
     fun resumeTimer() {
-        timer = createTimer(millisRemainingOnTimerPaused).start()
+        timer = createTimer(millisRemaining).start()
     }
 
-    fun resetTimer() {
-        cancelTimer()
-    }
+    fun resetTimer() = cancelTimer()
 
-    fun restore() {
-        timerModel.restore()
-    }
+    fun restoreSettings() = timerModel.restoreSettings()
 
-    fun save() {
-        timerModel.save()
-    }
+    fun saveSettings() = timerModel.saveSettings()
 
     fun createEnableStartButtonFlowable(): Flowable<Boolean> {
         return Flowable.combineLatest(
@@ -75,26 +70,30 @@ class TimerController(private val context: Context) {
         )
     }
 
-    private fun createTimer(millis: Long): CountDownTimer {
+    private fun createTimer(timerMillis: Long): CountDownTimer {
+        val dueTime = System.currentTimeMillis() + timerMillis
         // Register broadcast with OS
-        alarmSetter.set(context, System.currentTimeMillis() + millis)
+        alarmSetter.set(context, dueTime)
+        // Store timer in persistent storage
+        timerModel.saveTimer(dueTime)
 
-        return object : CountDownTimer(millis, TICK_INTERVAL) {
+        return object : CountDownTimer(timerMillis, TICK_INTERVAL) {
+
             override fun onFinish() {
                 timerTick.onNext(0)
+                millisRemaining = -1
             }
 
             override fun onTick(millisRemaining: Long) {
                 timerTick.onNext(millisRemaining)
-                millisRemainingOnTimerPaused = millisRemaining
+                this@TimerController.millisRemaining = millisRemaining
             }
         }
     }
 
     private fun cancelTimer() {
-        // Cancel alarm broadcast
         alarmSetter.cancel(context)
-
         timer?.cancel()
+        timerModel.clearTimer()
     }
 }
