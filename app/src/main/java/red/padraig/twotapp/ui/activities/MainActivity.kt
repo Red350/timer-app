@@ -10,10 +10,12 @@ import red.padraig.twotapp.extensions.getMilliseconds
 import red.padraig.twotapp.extensions.getMinutes
 import red.padraig.twotapp.extensions.getSeconds
 import red.padraig.twotapp.timer.TimerController
+import red.padraig.twotapp.ui.animators.ViewCrossFader
 
 
 class MainActivity : BaseActivity() {
 
+    var shortAnimationDuration = 0
     lateinit var timerController: TimerController
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,6 +25,7 @@ class MainActivity : BaseActivity() {
         setCountdownVisibility(false)
         initialiseNumberPickers()
         timerController = TimerController(this)
+        shortAnimationDuration = resources.getInteger(android.R.integer.config_shortAnimTime)
         displayTimerIfRunningOrPaused()
     }
 
@@ -62,7 +65,7 @@ class MainActivity : BaseActivity() {
         numberpicker_main_hours.minValue = 0
         numberpicker_main_hours.maxValue = 11
         numberpicker_main_minutes.minValue = 0
-        numberpicker_main_minutes.maxValue = 50
+        numberpicker_main_minutes.maxValue = 59
         numberpicker_main_seconds.minValue = 0
         numberpicker_main_seconds.maxValue = 59
     }
@@ -125,11 +128,11 @@ class MainActivity : BaseActivity() {
 
     private fun setCountdownVisibility(visible: Boolean) {
         if (visible) {
-            textview_main_displaycountdown.visibility = View.VISIBLE
-            linearlayout_main_setcountdown.visibility = View.INVISIBLE
+            ViewCrossFader(textview_main_displaycountdown, linearlayout_main_setcountdown)
+                    .fade(shortAnimationDuration.toLong())
         } else {
-            textview_main_displaycountdown.visibility = View.GONE
-            linearlayout_main_setcountdown.visibility = View.VISIBLE
+            ViewCrossFader(linearlayout_main_setcountdown, textview_main_displaycountdown)
+                    .fade(shortAnimationDuration.toLong())
         }
     }
 

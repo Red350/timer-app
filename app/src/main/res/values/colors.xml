@@ -11,4 +11,8 @@
     <color name="color_main_numberPickerText">#FFFFFF</color>
     <color name="color_main_button">#FFFFFF</color>
 
+    <!--Buttons-->
+    <color name="button_default">#BBBBBB</color>
+    <color name="button_disabled">#666666</color>
+    <color name="button_pressed">#FFFFFF</color>
 </resources>

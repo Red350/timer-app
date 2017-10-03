@@ -6,11 +6,6 @@
         <item name="android:textColorSecondary">@color/colorDefaultText</item>
         <item name="android:textColor">@color/colorDefaultText</item>
         <item name="android:windowBackground">@color/color_main_background</item>
-        <item name="android:imageButtonStyle">@style/defaultImageButton</item>
-    </style>
-
-    <style name="defaultImageButton">
-        <item name="android:backgroundTint">#FFFFFF</item>
     </style>
 
 </resources>
