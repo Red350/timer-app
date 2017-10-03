@@ -18,7 +18,7 @@ class TimerCompleteActivity : BaseActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
         window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
 
-        alarmAnnunciator = AlarmAnnunciator.ToastAlarm(applicationContext)
+        alarmAnnunciator = AlarmAnnunciator.Impl(applicationContext)
     }
 
     override fun onStart() {
