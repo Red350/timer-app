@@ -65,7 +65,7 @@ class MainActivity : BaseActivity() {
         numberpicker_main_hours.minValue = 0
         numberpicker_main_hours.maxValue = 11
         numberpicker_main_minutes.minValue = 0
-        numberpicker_main_minutes.maxValue = 50
+        numberpicker_main_minutes.maxValue = 59
         numberpicker_main_seconds.minValue = 0
         numberpicker_main_seconds.maxValue = 59
     }
