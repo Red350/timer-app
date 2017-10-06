@@ -5,10 +5,7 @@ import android.os.Bundle
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import red.padraig.twotapp.R
-import red.padraig.twotapp.extensions.getHours
-import red.padraig.twotapp.extensions.getMilliseconds
-import red.padraig.twotapp.extensions.getMinutes
-import red.padraig.twotapp.extensions.getSeconds
+import red.padraig.twotapp.extensions.toTimerStringWithMillis
 import red.padraig.twotapp.timer.TimerController
 import red.padraig.twotapp.ui.animators.ViewCrossFader
 
@@ -107,16 +104,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun updateCountdown(millisRemaining: Long) {
-        // todo move this to TimerController
-        val builder = StringBuilder()
-        builder.append(millisRemaining.getHours())
-        builder.append("h ")
-        builder.append(String.format("%02d", millisRemaining.getMinutes()))
-        builder.append("m ")
-        builder.append(String.format("%02d", millisRemaining.getSeconds()))
-        builder.append("s ")
-        builder.append(String.format("%03d", millisRemaining.getMilliseconds()))
-        textview_main_displaycountdown.text = builder.toString()
+        textview_main_displaycountdown.text = millisRemaining.toTimerStringWithMillis()
     }
 
     private fun ringAlarm() {

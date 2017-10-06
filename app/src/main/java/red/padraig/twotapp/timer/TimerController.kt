@@ -9,6 +9,9 @@ import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.activity_main.*
 import red.padraig.twotapp.R
 import red.padraig.twotapp.alarm.AlarmBroadcastSetter
+import red.padraig.twotapp.extensions.getSeconds
+import red.padraig.twotapp.extensions.toTimerString
+import red.padraig.twotapp.notifications.NotificationController
 import red.padraig.twotapp.ui.activities.MainActivity
 
 /**
@@ -17,7 +20,11 @@ import red.padraig.twotapp.ui.activities.MainActivity
 class TimerController(private val context: Context) {
 
     private val TICK_INTERVAL = 10L
+    private val NOTIFICATION_ID = 1
+    private val NOTIFICATION_TITLE_RUNNING = "Timer Running"
+    private val NOTIFICATION_TITLE_PAUSED = "Timer Paused"
 
+    private val notificationController = NotificationController.Impl(context)
     private val timerModel: TimerModel = TimerModel(context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE) )
     private val alarmSetter = AlarmBroadcastSetter.Impl()
 
@@ -58,21 +65,25 @@ class TimerController(private val context: Context) {
             millis = timerModel.millis
         }
         timer = createTimer(millis).start()
+        updateNotification(TimerState.RUNNING, millisRemaining)
     }
 
     fun pauseTimer() {
         cancelTimer()
         timerModel.savePausedTimer(millisRemaining)
+        updateNotification(TimerState.PAUSED, millisRemaining)
     }
 
     fun resumeTimer() {
         timer = createTimer(millisRemaining).start()
         timerModel.clearPausedTimer()
+        updateNotification(TimerState.RUNNING, millisRemaining)
     }
 
     fun resetTimer() {
         cancelTimer()
         timerModel.clearPausedTimer()
+        clearNotification()
     }
 
     fun restoreSettings() = timerModel.restoreSettings()
@@ -99,14 +110,21 @@ class TimerController(private val context: Context) {
 
         return object : CountDownTimer(timerMillis, TICK_INTERVAL) {
 
+            var seconds = timerMillis.getSeconds()
+
             override fun onFinish() {
                 timerTick.onNext(0)
                 millisRemaining = -1
+                clearNotification()
             }
 
             override fun onTick(millisRemaining: Long) {
                 timerTick.onNext(millisRemaining)
                 this@TimerController.millisRemaining = millisRemaining
+                if (seconds != millisRemaining.getSeconds()) {
+                    seconds = millisRemaining.getSeconds()
+                    updateNotification(TimerState.RUNNING, millisRemaining)
+                }
             }
         }
     }
@@ -115,5 +133,29 @@ class TimerController(private val context: Context) {
         alarmSetter.cancel(context)
         timer?.cancel()
         timerModel.clearActiveTimerDueTime()
+    }
+
+    private fun updateNotification(state: TimerState, millisRemaining: Long) {
+        when (state) {
+            TimerState.STOPPED -> clearNotification()
+            TimerController.TimerState.RUNNING ->
+                updateNotification(R.drawable.ic_play, NOTIFICATION_TITLE_RUNNING, millisRemaining.toTimerString())
+            TimerController.TimerState.PAUSED ->
+                updateNotification(R.drawable.ic_pause, NOTIFICATION_TITLE_PAUSED, millisRemaining.toTimerString())
+        }
+    }
+
+    private fun updateNotification(icon: Int, title: String, message: String) {
+        notificationController.update(NOTIFICATION_ID, icon, title, message)
+    }
+
+    private fun clearNotification() {
+        notificationController.cancel(NOTIFICATION_ID)
+    }
+
+    private enum class TimerState {
+        STOPPED,
+        RUNNING,
+        PAUSED
     }
 }
